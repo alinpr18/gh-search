@@ -65,43 +65,68 @@ onMounted(() => {
       />
       <button class="submit">Search</button>
     </form>
-    <template v-if="favorites.size > 0">
-      <h2>Favorites</h2>
-      <ul>
-        <li v-for="[_, favorite] in favorites" :key="favorite.id">
-          <p>
-            {{ favorite.login }}
-            <button @click="removeFavorite({ id: favorite.id })">🗑️</button>
-          </p>
-        </li>
-      </ul>
-    </template>
-    <p class="error" v-if="error">{{ error }}</p>
-    <template v-else-if="data">
-      <h2>Results</h2>
-      <ul class="users-list">
-        <li class="user" v-for="user in data.items" :key="user.id">
-          <img
-            width="50"
-            height="50"
-            :src="user.avatar_url"
-            :alt="user.login"
-          />
-          <a :href="user.html_url" target="_blank">{{ user.login }}</a>
-          <button
-            v-if="!favorites.has(user.id)"
-            @click="addFavorite({ id: user.id, value: user })"
-          >
-            ☆
-          </button>
-          <button v-else @click="removeFavorite({ id: user.id })">★</button>
-        </li>
-      </ul>
-    </template>
+    <Transition>
+      <div v-if="favorites.size > 0">
+        <h2>Favorites</h2>
+        <TransitionGroup tag="ul" name="list">
+          <li v-for="[_, favorite] in favorites" :key="favorite.id">
+            <p>
+              {{ favorite.login }}
+              <button @click="removeFavorite({ id: favorite.id })">🗑️</button>
+            </p>
+          </li>
+        </TransitionGroup>
+      </div>
+    </Transition>
+    <Transition>
+      <p class="error" v-if="error">{{ error }}</p>
+      <div v-else-if="data">
+        <h2>Results</h2>
+        <ul class="users-list">
+          <li class="user" v-for="user in data.items" :key="user.id">
+            <img
+              width="50"
+              height="50"
+              :src="user.avatar_url"
+              :alt="user.login"
+            />
+            <a :href="user.html_url" target="_blank">{{ user.login }}</a>
+            <button
+              v-if="!favorites.has(user.id)"
+              @click="addFavorite({ id: user.id, value: user })"
+            >
+              ☆
+            </button>
+            <button v-else @click="removeFavorite({ id: user.id })">★</button>
+          </li>
+        </ul>
+      </div>
+    </Transition>
   </main>
 </template>
 
 <style>
+/* we will explain what these classes do next! */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
 .main {
   max-width: 600px;
   margin: auto;
