@@ -45,7 +45,7 @@ const updateStorage = () => {
 
 onMounted(() => {
   const savedStorage = JSON.parse(window.localStorage.getItem("favorites"));
-  if (savedStorage.length) {
+  if (savedStorage) {
     favorites.value = new Map(
       savedStorage.map((favorite) => [favorite.id, favorite])
     );
