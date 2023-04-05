@@ -78,7 +78,6 @@ onMounted(() => {
         </TransitionGroup>
       </div>
     </Transition>
-    <Transition>
       <p class="error" v-if="error">{{ error }}</p>
       <div v-else-if="data">
         <h2>Results</h2>
@@ -101,7 +100,6 @@ onMounted(() => {
           </li>
         </ul>
       </div>
-    </Transition>
   </main>
 </template>
 
